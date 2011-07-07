@@ -2,6 +2,7 @@
 
 Structure:
 
+bin - compiled NSIS plugin (ready-to-use)
 plugin - contains source code for building DotNetChecker plugin in Visual Studio 2010
 nsis - contains CheckNetFramework macros (DotNetChecker.nsh) and example NSIS installation file
 
