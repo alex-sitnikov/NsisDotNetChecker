@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "pluginapi.h"
+#include "Tchar.h"
 
 unsigned int g_stringsize;
 stack_t **g_stacktop;
@@ -186,6 +187,6 @@ int NSISCALL popint_or()
 void NSISCALL pushint(int value)
 {
 	char buffer[1024];
-	wsprintf(buffer, "%d", value);
+	wsprintf(buffer, _T("%d"), value);
 	pushstring(buffer);
 }
