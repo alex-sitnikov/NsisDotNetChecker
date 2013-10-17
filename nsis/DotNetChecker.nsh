@@ -2,6 +2,7 @@
 	Var /GLOBAL dotNetUrl
 	Var /GLOBAL dotNetReadableVersion
 
+	!define DOTNET45_URL 	    "http://go.microsoft.com/fwlink/?LinkId=225702"
 	!define DOTNET40Full_URL 	"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=0a391abd-25c1-4fc0-919f-b21f31ab88b7&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f9%2f5%2fA%2f95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE%2fdotNetFx40_Full_x86_x64.exe"
 	!define DOTNET40Client_URL	"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=e5ad0459-cbcc-4b4f-97b6-fb17111cf544&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f5%2f6%2f2%2f562A10F9-C9F4-4313-A044-9C94E0A8FAC8%2fdotNetFx40_Client_x86_x64.exe"
 	!define DOTNET35_URL		"http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
@@ -10,7 +11,10 @@
 	!define DOTNET11_URL		"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
 	!define DOTNET10_URL		"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
 
-	${If} ${FrameworkVersion} == "40Full"
+	${If} ${FrameworkVersion} == "45"
+		StrCpy $dotNetUrl ${DOTNET45_URL}
+		StrCpy $dotNetReadableVersion "4.5"
+	${ElseIf} ${FrameworkVersion} == "40Full"
 		StrCpy $dotNetUrl ${DOTNET40Full_URL}
 		StrCpy $dotNetReadableVersion "4.0 Full"
 	${ElseIf} ${FrameworkVersion} == "40Client"
