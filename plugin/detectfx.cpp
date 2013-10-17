@@ -40,6 +40,7 @@ const TCHAR *g_szNetfx40ClientRegKeyName = _T("Software\\Microsoft\\NET Framewor
 const TCHAR *g_szNetfx40FullRegKeyName = _T("Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full");
 const TCHAR *g_szNetfx40SPxRegValueName = _T("Servicing");
 const TCHAR *g_szNetfx45RegKeyName = _T("Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full");
+const TCHAR *g_szNetfx45RegValueName = _T("Release");
 const TCHAR *g_szNetfxStandardRegValueName = _T("Install");
 const TCHAR *g_szNetfxStandardSPxRegValueName = _T("SP");
 const TCHAR *g_szNetfxStandardVersionRegValueName = _T("Version");
@@ -62,11 +63,9 @@ const int g_iNetfx40VersionMinor = 0;
 const int g_iNetfx40VersionBuild = 30319;
 const int g_iNetfx40VersionRevision = 0;
 
-// Version information for final release of .NET Framework 4.5
-const int g_iNetfx45VersionMajor = 4;
-const int g_iNetfx45VersionMinor = 5;
-const int g_iNetfx45VersionBuild = 50709;
-const int g_iNetfx45VersionRevision = 0;
+// Version information for final release of .NET Framework 4.5 and 4.5.1
+const int g_dwNetfx45ReleaseVersion = 378389;
+const int g_dwNetfx451ReleaseVersion = 378758;
 
 // Constants for known .NET Framework versions used with the GetRequestedRuntimeInfo API
 const TCHAR *g_szNetfx10VersionString = _T("v1.0.3705");
@@ -89,6 +88,7 @@ bool IsNetfx35Installed();
 bool IsNetfx40ClientInstalled();
 bool IsNetfx40FullInstalled();
 bool IsNetfx45Installed();
+bool IsNetfx451Installed();
 bool RegistryGetValue(HKEY, const TCHAR*, const TCHAR*, DWORD, LPBYTE, DWORD);
 
 
@@ -610,10 +610,10 @@ bool IsNetfx40FullInstalled()
 /******************************************************************
 Function Name:	IsNetfx45Installed
 Description:	Uses the detection method recommended at
-                http://msdn.microsoft.com/en-us/library/ee942965.aspx
+                http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
                 to determine whether the .NET Framework 4.5 is
                 installed on the machine
-Inputs:	        NONE
+Inputs:         NONE
 Results:        true if the .NET Framework 4.5 is installed
                 false otherwise
 ******************************************************************/
@@ -622,17 +622,38 @@ bool IsNetfx45Installed()
 	bool bRetValue = false;
 	DWORD dwRegValue=0;
 
-	// Check that the Install registry value exists and equals 1
-	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx45RegKeyName, g_szNetfxStandardRegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx45RegKeyName, g_szNetfx45RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
 	{
-		if (1 == dwRegValue)
+		if (g_dwNetfx45ReleaseVersion <= dwRegValue)
 			bRetValue = true;
 	}
 
-	// A system with a pre-release version of the .NET Framework 4.5 can
-	// have the Install value.  As an added verification, check the
-	// version number listed in the registry
-	return (bRetValue && CheckNetfxBuildNumber(g_szNetfx45RegKeyName, g_szNetfxStandardVersionRegValueName, g_iNetfx45VersionMajor, g_iNetfx45VersionMinor, g_iNetfx45VersionBuild, g_iNetfx45VersionRevision));
+	return bRetValue;
+}
+
+
+/******************************************************************
+Function Name:	IsNetfx451Installed
+Description:	Uses the detection method recommended at
+                http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
+                to determine whether the .NET Framework 4.5.1 is
+                installed on the machine
+Inputs:         NONE
+Results:        true if the .NET Framework 4.5.1 is installed
+                false otherwise
+******************************************************************/
+bool IsNetfx451Installed()
+{
+	bool bRetValue = false;
+	DWORD dwRegValue=0;
+
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx45RegKeyName, g_szNetfx45RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
+	{
+		if (g_dwNetfx451ReleaseVersion <= dwRegValue)
+			bRetValue = true;
+	}
+
+	return bRetValue;
 }
 
 
@@ -672,16 +693,68 @@ bool RegistryGetValue(HKEY hk, const TCHAR * pszKey, const TCHAR * pszValue, DWO
 
 //********************************************* NSIS Plugin Functions ****************************************************************************
 
+//***************************************************** .NET 4.51 **********************************************************************************
+
+extern "C"
+void __declspec(dllexport) IsDotNet451Installed(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra) {
+	EXDLL_INIT();
+	pushstring((IsNetfx451Installed()) ? "true" : "false");
+}
+
+extern "C"
+void __declspec(dllexport) GetDotNet451ServicePack(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra) {
+	EXDLL_INIT();
+
+	int iNetfx451SPLevel = -1;
+	bool bNetfx451Installed = (IsNetfx451Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH*20];
+
+	if (bNetfx451Installed)
+	{
+		iNetfx451SPLevel = GetNetfxSPLevel(g_szNetfx45RegKeyName, g_szNetfx40SPxRegValueName);
+
+		if (iNetfx451SPLevel > 0)
+			pushint(iNetfx451SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
+}
+
 //***************************************************** .NET 4.5 **********************************************************************************
 
 extern "C"
 void __declspec(dllexport) IsDotNet45Installed(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra) {
 	EXDLL_INIT();
+	pushstring((IsNetfx45Installed()) ? "true" : "false");
+}
 
-	// The .NET Framework 4.5 is an add-in that installs
-	// on top of the .NET Framework 4.0.  For this version
-	// check, validate that 4.0 is also installed.
-	pushstring((IsNetfx40FullInstalled() && IsNetfx45Installed()) ? "true" : "false");
+extern "C"
+void __declspec(dllexport) GetDotNet45ServicePack(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra) {
+	EXDLL_INIT();
+
+	int iNetfx45SPLevel = -1;
+	bool bNetfx45Installed = (IsNetfx45Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH*20];
+
+	if (bNetfx45Installed)
+	{
+		iNetfx45SPLevel = GetNetfxSPLevel(g_szNetfx45RegKeyName, g_szNetfx40SPxRegValueName);
+
+		if (iNetfx45SPLevel > 0)
+			pushint(iNetfx45SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
 }
 
 //************************************************* .NET 4.0 Full ********************************************************************************

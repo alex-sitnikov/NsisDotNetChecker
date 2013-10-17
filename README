@@ -1,4 +1,4 @@
-.NET Framework Checker NSIS plugin is used to detect if the required .NET Framwork is installed and if it is not - plugin will download and install the required package. Plugin C++ source code is based on the Aaron Stebner work described at http://blogs.msdn.com/b/astebner/archive/2009/06/16/9763379.aspx.
+.NET Framework Checker NSIS plugin is used to detect if the required .NET Framework is installed and if it is not - plugin will download and install the required package. Plugin C++ source code is based on the Aaron Stebner work described at http://blogs.msdn.com/b/astebner/archive/2009/06/16/9763379.aspx.
 
 Structure:
 
@@ -13,6 +13,8 @@ Usage:
 3. Reference DotNetChecker.nsh in your main NSI file like this:
 	!include "DotNetChecker.nsh"
 4. Insert macros with the version of required .NET framework like this:
+	!insertmacro CheckNetFramework 451 ; if your application targets .NET 4.5.1 Framework
+	OR
 	!insertmacro CheckNetFramework 45 ; if your application targets .NET 4.5 Framework
 	OR
 	!insertmacro CheckNetFramework 40Client ; if your application targets .NET 4.0 Client Framework
