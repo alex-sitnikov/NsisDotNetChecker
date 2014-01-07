@@ -63,9 +63,9 @@ const int g_iNetfx40VersionMinor = 0;
 const int g_iNetfx40VersionBuild = 30319;
 const int g_iNetfx40VersionRevision = 0;
 
-// Version information for final release of .NET Framework 4.5 and 4.5.1
+// Version information for final release of .NET Framework 4.5 and 4.5.1 (4.5.1 updated as per Windows 8.1 Release value)
 const int g_dwNetfx45ReleaseVersion = 378389;
-const int g_dwNetfx451ReleaseVersion = 378758;
+const int g_dwNetfx451ReleaseVersion = 378675;		 
 
 // Constants for known .NET Framework versions used with the GetRequestedRuntimeInfo API
 const TCHAR *g_szNetfx10VersionString = _T("v1.0.3705");
@@ -636,6 +636,8 @@ bool IsNetfx45Installed()
 Function Name:	IsNetfx451Installed
 Description:	Uses the detection method recommended at
                 http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
+				and
+				http://blogs.msdn.com/b/astebner/archive/2013/11/11/10466402.aspx
                 to determine whether the .NET Framework 4.5.1 is
                 installed on the machine
 Inputs:         NONE
