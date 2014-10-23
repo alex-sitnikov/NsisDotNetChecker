@@ -67,6 +67,9 @@ const int g_iNetfx40VersionRevision = 0;
 const int g_dwNetfx45ReleaseVersion = 378389;
 const int g_dwNetfx451ReleaseVersion = 378675;		 
 
+// Version information for final release of .NET Framework 4.5.2
+const int g_dwNetfx452ReleaseVersion = 379893;
+
 // Constants for known .NET Framework versions used with the GetRequestedRuntimeInfo API
 const TCHAR *g_szNetfx10VersionString = _T("v1.0.3705");
 const TCHAR *g_szNetfx11VersionString = _T("v1.1.4322");
@@ -89,6 +92,7 @@ bool IsNetfx40ClientInstalled();
 bool IsNetfx40FullInstalled();
 bool IsNetfx45Installed();
 bool IsNetfx451Installed();
+bool IsNetfx452Installed();
 bool RegistryGetValue(HKEY, const TCHAR*, const TCHAR*, DWORD, LPBYTE, DWORD);
 
 
@@ -659,6 +663,31 @@ bool IsNetfx451Installed()
 }
 
 
+
+/******************************************************************
+Function Name: IsNetfx452Installed
+Description: Uses the detection method recommended at
+http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
+to determine whether the .NET Framework 4.5.2 is
+installed on the machine
+Inputs: NONE
+Results: true if the .NET Framework 4.5.2 is installed
+false otherwise
+******************************************************************/
+bool IsNetfx452Installed()
+{
+	bool bRetValue = false;
+	DWORD dwRegValue = 0;
+
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx45RegKeyName, g_szNetfx45RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
+	{
+		if (g_dwNetfx452ReleaseVersion <= dwRegValue)
+			bRetValue = true;
+	}
+
+	return bRetValue;
+}
+
 /******************************************************************
 Function Name:  RegistryGetValue
 Description:    Get the value of a reg key
@@ -694,6 +723,38 @@ bool RegistryGetValue(HKEY hk, const TCHAR * pszKey, const TCHAR * pszValue, DWO
 }
 
 //********************************************* NSIS Plugin Functions ****************************************************************************
+
+//***************************************************** .NET 4.52 **********************************************************************************
+
+extern "C"
+void __declspec(dllexport) IsDotNet452Installed(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra) {
+	EXDLL_INIT();
+	pushstring((IsNetfx452Installed()) ? "true" : "false");
+}
+
+extern "C"
+void __declspec(dllexport) GetDotNet452ServicePack(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra) {
+	EXDLL_INIT();
+
+	int iNetfx452SPLevel = -1;
+	bool bNetfx452Installed = (IsNetfx452Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH * 20];
+
+	if (bNetfx452Installed)
+	{
+		iNetfx452SPLevel = GetNetfxSPLevel(g_szNetfx45RegKeyName, g_szNetfx40SPxRegValueName);
+
+		if (iNetfx452SPLevel > 0)
+			pushint(iNetfx452SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
+}
 
 //***************************************************** .NET 4.51 **********************************************************************************
 
