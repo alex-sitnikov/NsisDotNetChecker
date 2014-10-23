@@ -13,6 +13,8 @@ Usage:
 3. Reference DotNetChecker.nsh in your main NSI file like this:
 	!include "DotNetChecker.nsh"
 4. Insert macros with the version of required .NET framework like this:
+	!insertmacro CheckNetFramework 452 ; if your application targets .NET 4.5.2 Framework
+	OR
 	!insertmacro CheckNetFramework 451 ; if your application targets .NET 4.5.1 Framework
 	OR
 	!insertmacro CheckNetFramework 45 ; if your application targets .NET 4.5 Framework
