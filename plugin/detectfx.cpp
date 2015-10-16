@@ -41,6 +41,8 @@ const TCHAR *g_szNetfx40FullRegKeyName = _T("Software\\Microsoft\\NET Framework 
 const TCHAR *g_szNetfx40SPxRegValueName = _T("Servicing");
 const TCHAR *g_szNetfx45RegKeyName = _T("Software\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full");
 const TCHAR *g_szNetfx45RegValueName = _T("Release");
+const TCHAR *g_szNetfx46RegKeyName = g_szNetfx45RegKeyName;
+const TCHAR *g_szNetfx46RegValueName = g_szNetfx45RegValueName;
 const TCHAR *g_szNetfxStandardRegValueName = _T("Install");
 const TCHAR *g_szNetfxStandardSPxRegValueName = _T("SP");
 const TCHAR *g_szNetfxStandardVersionRegValueName = _T("Version");
@@ -70,6 +72,11 @@ const int g_dwNetfx451ReleaseVersion = 378675;
 // Version information for final release of .NET Framework 4.5.2
 const int g_dwNetfx452ReleaseVersion = 379893;
 
+// Version information for final release of .NET Framework 4.6
+const int g_dwNetfx46Win10ReleaseVersion = 393295; 
+const int g_dwNetfx46ReleaseVersion = 393297;
+
+
 // Constants for known .NET Framework versions used with the GetRequestedRuntimeInfo API
 const TCHAR *g_szNetfx10VersionString = _T("v1.0.3705");
 const TCHAR *g_szNetfx11VersionString = _T("v1.1.4322");
@@ -93,6 +100,7 @@ bool IsNetfx40FullInstalled();
 bool IsNetfx45Installed();
 bool IsNetfx451Installed();
 bool IsNetfx452Installed();
+bool IsNetfx46Installed();
 bool RegistryGetValue(HKEY, const TCHAR*, const TCHAR*, DWORD, LPBYTE, DWORD);
 
 
@@ -635,6 +643,30 @@ bool IsNetfx45Installed()
 	return bRetValue;
 }
 
+/******************************************************************
+Function Name:	IsNetfx46Installed
+Description:	Uses the detection method recommended at
+http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
+to determine whether the .NET Framework 4.6 is
+installed on the machine
+Inputs:         NONE
+Results:        true if the .NET Framework 4.6 is installed
+false otherwise
+******************************************************************/
+bool IsNetfx46Installed()
+{
+	bool bRetValue = false;
+	DWORD dwRegValue = 0;
+
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx46RegKeyName, g_szNetfx46RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
+	{
+		if (g_dwNetfx46ReleaseVersion <= dwRegValue || g_dwNetfx46Win10ReleaseVersion <= dwRegValue)
+			bRetValue = true;
+	}
+
+	return bRetValue;
+}
+
 
 /******************************************************************
 Function Name:	IsNetfx451Installed
@@ -723,6 +755,38 @@ bool RegistryGetValue(HKEY hk, const TCHAR * pszKey, const TCHAR * pszValue, DWO
 }
 
 //********************************************* NSIS Plugin Functions ****************************************************************************
+
+//***************************************************** .NET 4.6 **********************************************************************************
+
+extern "C"
+void __declspec(dllexport) IsDotNet46Installed(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra) {
+	EXDLL_INIT();
+	pushstring((IsNetfx46Installed()) ? "true" : "false");
+}
+
+extern "C"
+void __declspec(dllexport) GetDotNet46ServicePack(HWND hwndParent, int string_size, char *variables, stack_t **stacktop, extra_parameters *extra) {
+	EXDLL_INIT();
+
+	int iNetfx46SPLevel = -1;
+	bool bNetfx46Installed = (IsNetfx46Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH * 20];
+
+	if (bNetfx46Installed)
+	{
+		iNetfx46SPLevel = GetNetfxSPLevel(g_szNetfx46RegKeyName, g_szNetfx40SPxRegValueName);
+
+		if (iNetfx46SPLevel > 0)
+			pushint(iNetfx46SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
+}
 
 //***************************************************** .NET 4.52 **********************************************************************************
 
