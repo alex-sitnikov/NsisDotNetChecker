@@ -28,6 +28,7 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -84,7 +85,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="detectfx.cpp" />
-    <ClCompile Include="nsis\pluginapi.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pluginapi.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

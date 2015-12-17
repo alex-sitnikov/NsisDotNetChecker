@@ -26,8 +26,8 @@
     <ClCompile Include="detectfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nsis\pluginapi.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pluginapi.lib" />
   </ItemGroup>
 </Project>
