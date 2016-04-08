@@ -1,7 +1,8 @@
 #files to exclude from github
 plugin/DotNetChecker.opensdf
 plugin/DotNetChecker.sdf
-plugin/DotNetChecker.suo
+plugin/*.suo
 plugin/ipch
 plugin/Release
 nsis/*.exe
+plugin/.vs
