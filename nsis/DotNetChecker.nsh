@@ -63,7 +63,8 @@
 	DotNetChecker::IsDotNet${FrameworkVersion}Installed
 	Pop $0
 	
-	${If} $0 == "false"
+	${If} $0 == "false"  ; if script is compiled in UNICODE mode then we get a "false" - but unicode mode would NOT work for Windows 95/98/ME
+		${OrIf} $0 == "f"  ; if script is compiled in ANSI mode then we get only an "f"  https://github.com/ReVolly/NsisDotNetChecker/issues/4
 		DetailPrint ".NET Framework $dotNetReadableVersion not found, download is required for program to run."
 		Goto NoDotNET
 	${Else}
