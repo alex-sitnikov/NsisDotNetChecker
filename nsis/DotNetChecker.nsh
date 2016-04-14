@@ -1,7 +1,8 @@
 !macro CheckNetFramework FrameworkVersion
-	Var /GLOBAL dotNetUrl
-	Var /GLOBAL dotNetReadableVersion
+	Var /GLOBAL dotNetUrl${FrameworkVersion}
+	Var /GLOBAL dotNetReadableVersion${FrameworkVersion}
 
+	!ifndef DOTNET46_URL
 	!define DOTNET46_URL	 	"http://go.microsoft.com/fwlink/?LinkId=528232"
 	!define DOTNET452_URL	 	"http://go.microsoft.com/fwlink/?LinkId=397708"
 	!define DOTNET451_URL 		"http://go.microsoft.com/fwlink/?LinkId=322116"
@@ -13,40 +14,41 @@
 	!define DOTNET20_URL		"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=0856eacb-4362-4b0d-8edd-aab15c5e04f5&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f5%2f6%2f7%2f567758a3-759e-473e-bf8f-52154438565a%2fdotnetfx.exe"
 	!define DOTNET11_URL		"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
 	!define DOTNET10_URL		"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
+	!endif
 
 	${If} ${FrameworkVersion} == "46"
-		StrCpy $dotNetUrl ${DOTNET46_URL}
-		StrCpy $dotNetReadableVersion "4.6"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET46_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.6"
 	${ElseIf} ${FrameworkVersion} == "452"
-		StrCpy $dotNetUrl ${DOTNET452_URL}
-		StrCpy $dotNetReadableVersion "4.52"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET452_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.52"
 	${ElseIf} ${FrameworkVersion} == "451"
-		StrCpy $dotNetUrl ${DOTNET451_URL}
-		StrCpy $dotNetReadableVersion "4.51"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET451_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.51"
 	${ElseIf} ${FrameworkVersion} == "45"
-		StrCpy $dotNetUrl ${DOTNET45_URL}
-		StrCpy $dotNetReadableVersion "4.5"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET45_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.5"
 	${ElseIf} ${FrameworkVersion} == "40Full"
-		StrCpy $dotNetUrl ${DOTNET40Full_URL}
-		StrCpy $dotNetReadableVersion "4.0 Full"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET40Full_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.0 Full"
 	${ElseIf} ${FrameworkVersion} == "40Client"
-		StrCpy $dotNetUrl ${DOTNET40Client_URL}
-		StrCpy $dotNetReadableVersion "4.0 Client"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET40Client_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.0 Client"
 	${ElseIf} ${FrameworkVersion} == "35"
-		StrCpy $dotNetUrl ${DOTNET35_URL}
-		StrCpy $dotNetReadableVersion "3.5"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET35_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "3.5"
 	${ElseIf} ${FrameworkVersion} == "30"
-		StrCpy $dotNetUrl ${DOTNET30_URL}
-		StrCpy $dotNetReadableVersion "3.0"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET30_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "3.0"
 	${ElseIf} ${FrameworkVersion} == "20"
-		StrCpy $dotNetUrl ${DOTNET20_URL}
-		StrCpy $dotNetReadableVersion "2.0"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET20_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "2.0"
 	${ElseIf} ${FrameworkVersion} == "11"
-		StrCpy $dotNetUrl ${DOTNET11_URL}
-		StrCpy $dotNetReadableVersion "1.1"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET11_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "1.1"
 	${ElseIf} ${FrameworkVersion} == "10"
-		StrCpy $dotNetUrl ${DOTNET10_URL}
-		StrCpy $dotNetReadableVersion "1.0"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET10_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "1.0"
 	${EndIf}
 	
 	DetailPrint "Checking .NET Framework version..."
@@ -63,35 +65,35 @@
 	DotNetChecker::IsDotNet${FrameworkVersion}Installed
 	Pop $0
 	
-	${If} $0 == "false"  ; if script is compiled in UNICODE mode then we get a "false" - but unicode mode would NOT work for Windows 95/98/ME
-		${OrIf} $0 == "f"  ; if script is compiled in ANSI mode then we get only an "f"  https://github.com/ReVolly/NsisDotNetChecker/issues/4
-		DetailPrint ".NET Framework $dotNetReadableVersion not found, download is required for program to run."
-		Goto NoDotNET
+	${If} $0 == "false"
+${OrIf} $0 == "f"  ; if script is compiled in ANSI mode then we get only an "f"  https://github.com/ReVolly/NsisDotNetChecker/issues/4
+		DetailPrint ".NET Framework $dotNetReadableVersion${FrameworkVersion} not found, download is required for program to run."
+		Goto NoDotNET${FrameworkVersion}
 	${Else}
-		DetailPrint ".NET Framework $dotNetReadableVersion found, no need to install."
-		Goto NewDotNET
+		DetailPrint ".NET Framework $dotNetReadableVersion${FrameworkVersion} found, no need to install."
+		Goto NewDotNET${FrameworkVersion}
 	${EndIf}
 
-NoDotNET:
+NoDotNET${FrameworkVersion}:
 	MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
-	".NET Framework not installed. Required version: $dotNetReadableVersion.$\nDownload .NET Framework $dotNetReadableVersion from www.microsoft.com?" \
-	/SD IDYES IDYES DownloadDotNET IDNO NewDotNET
-	goto GiveUpDotNET ;IDCANCEL
+	".NET Framework not installed. Required version: $dotNetReadableVersion${FrameworkVersion}.$\nDownload .NET Framework $dotNetReadableVersion${FrameworkVersion} from www.microsoft.com?" \
+	/SD IDYES IDYES DownloadDotNET${FrameworkVersion} IDNO NewDotNET${FrameworkVersion}
+	goto GiveUpDotNET${FrameworkVersion} ;IDCANCEL
 
-DownloadDotNET:
-	DetailPrint "Beginning download of .NET Framework $dotNetReadableVersion."
-	NSISDL::download $dotNetUrl "$TEMP\dotnetfx.exe"
+DownloadDotNET${FrameworkVersion}:
+	DetailPrint "Beginning download of .NET Framework $dotNetReadableVersion${FrameworkVersion}."
+	NSISDL::download $dotNetUrl${FrameworkVersion} "$TEMP\dotnetfx.exe"
 	DetailPrint "Completed download."
 
 	Pop $0
 	${If} $0 == "cancel"
 		MessageBox MB_YESNO|MB_ICONEXCLAMATION \
 		"Download cancelled.  Continue Installation?" \
-		IDYES NewDotNET IDNO GiveUpDotNET
+		IDYES NewDotNET${FrameworkVersion} IDNO GiveUpDotNET${FrameworkVersion}
 	${ElseIf} $0 != "success"
 		MessageBox MB_YESNO|MB_ICONEXCLAMATION \
 		"Download failed:$\n$0$\n$\nContinue Installation?" \
-		IDYES NewDotNET IDNO GiveUpDotNET
+		IDYES NewDotNET${FrameworkVersion} IDNO GiveUpDotNET${FrameworkVersion}
 	${EndIf}
 
 	DetailPrint "Pausing installation while downloaded .NET Framework installer runs."
@@ -100,12 +102,12 @@ DownloadDotNET:
 	DetailPrint "Completed .NET Framework install/update. Removing .NET Framework installer."
 	Delete "$TEMP\dotnetfx.exe"
 	DetailPrint ".NET Framework installer removed."
-	goto NewDotNet
+	goto NewDotNet${FrameworkVersion}
 
-GiveUpDotNET:
+GiveUpDotNET${FrameworkVersion}:
 	Abort "Installation cancelled by user."
 
-NewDotNET:
+NewDotNET${FrameworkVersion}:
 	DetailPrint "Proceeding with remainder of installation."
 	Pop $0
 	Pop $1
