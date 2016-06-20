@@ -109,13 +109,13 @@ GiveUpDotNET${FrameworkVersion}:
 
 NewDotNET${FrameworkVersion}:
 	DetailPrint "Proceeding with remainder of installation."
-	Pop $0
-	Pop $1
-	Pop $2
-	Pop $3
-	Pop $4
-	Pop $5
-	Pop $6
 	Pop $7
+	Pop $6
+	Pop $5
+	Pop $4
+	Pop $3
+	Pop $2
+	Pop $1
+	Pop $0
 
 !macroend
