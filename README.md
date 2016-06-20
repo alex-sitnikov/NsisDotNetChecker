@@ -1,8 +1,3 @@
-# About my fork
-This was forked from [ReVolly/NsisDotNetChecker](https://github.com/ReVolly/NsisDotNetChecker), and I made these modifications:
-- Workaround to work not only in UNICODE but also **work in ANSI scripts**.
-- "Closure": All variables and functions were renamed to the respective Framework version, so that **we can call the plugin more than once and install two different versions of framework**.
-
 # .NET Framework Checker NSIS plugin
 The .NET Framework Checker NSIS plugin is used to detect if the required .NET Framework is installed and if it is not - plugin will download and install the required package. The plugin's C++ source code is based on the [work of Aaron Stebner](http://blogs.msdn.com/b/astebner/archive/2009/06/16/9763379.aspx).
 
