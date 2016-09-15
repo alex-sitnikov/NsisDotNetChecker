@@ -81,3 +81,7 @@ The return value (Pop $0) will be:
 - -1 if no service pack installed for this framework
 
 - some positive int value otherwise
+
+*NB3:* Plugin works not only in UNICODE but also in ANSI scripts.
+
+*NB4:* The plugin can be called more than once for installing two (or more) different versions of framework.
