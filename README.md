@@ -24,6 +24,14 @@ The .NET Framework Checker NSIS plugin is used to detect if the required .NET Fr
 
 The Plugin and its Macro can be invoked in by any Function or within any Section of the NSI script.
 
+### .NET 4.6.2
+
+	!insertmacro CheckNetFramework 462
+
+### .NET 4.6.1
+
+	!insertmacro CheckNetFramework 461
+	
 ### .NET 4.6
 
 	!insertmacro CheckNetFramework 46
