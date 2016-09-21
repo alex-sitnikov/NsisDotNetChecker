@@ -22,7 +22,7 @@ The .NET Framework Checker NSIS plugin is used to detect if the required .NET Fr
 
 ## Usage
 
-The Plugin and its Macro can be invoked in by any Function or within any Section of the NSI script.
+The Plugin and its Macro can be invoked by any Function or within any Section of the NSI script.
 
 ### .NET 4.6.2
 
