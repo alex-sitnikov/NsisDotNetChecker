@@ -3,8 +3,8 @@
 	Var /GLOBAL dotNetReadableVersion${FrameworkVersion}
 
 	!ifndef DOTNET462_URL
-	!define DOTNET462_URL	 	"http://go.microsoft.com/fwlink/p/?LinkId=780601"
-	!define DOTNET461_URL	 	"http://go.microsoft.com/fwlink/p/?LinkId=671744"
+	!define DOTNET462_URL	 	"http://go.microsoft.com/fwlink/?LinkId=780600"
+	!define DOTNET461_URL	 	"http://go.microsoft.com/fwlink/?LinkId=671743"
 	!define DOTNET46_URL	 	"http://go.microsoft.com/fwlink/?LinkId=528232"
 	!define DOTNET452_URL	 	"http://go.microsoft.com/fwlink/?LinkId=397708"
 	!define DOTNET451_URL 		"http://go.microsoft.com/fwlink/?LinkId=322116"
