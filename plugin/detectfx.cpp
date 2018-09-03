@@ -94,6 +94,10 @@ const int g_dwNetfx47ReleaseVersion = 460805;
 const int g_dwNetfx471Win10ReleaseVersion = 461308;
 const int g_dwNetfx471ReleaseVersion = 461310;
 
+// Version information for final release of .NET Framework 4.7.2
+const int g_dwNetfx472Win10ReleaseVersion = 461808;
+const int g_dwNetfx472ReleaseVersion = 461814;
+
 // Constants for known .NET Framework versions used with the GetRequestedRuntimeInfo API
 const TCHAR *g_szNetfx10VersionString = _T("v1.0.3705");
 const TCHAR *g_szNetfx11VersionString = _T("v1.1.4322");
@@ -122,6 +126,7 @@ bool IsNetfx461Installed();
 bool IsNetfx462Installed();
 bool IsNetfx47Installed();
 bool IsNetfx471Installed();
+bool IsNetfx472Installed();
 bool RegistryGetValue(HKEY, const TCHAR*, const TCHAR*, DWORD, LPBYTE, DWORD);
 
 
@@ -803,16 +808,16 @@ false otherwise
 ******************************************************************/
 bool IsNetfx47Installed()
 {
-  bool bRetValue = false;
-  DWORD dwRegValue = 0;
+	bool bRetValue = false;
+	DWORD dwRegValue = 0;
 
-  if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx47RegKeyName, g_szNetfx47RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
-  {
-    if (g_dwNetfx47ReleaseVersion <= dwRegValue || g_dwNetfx47Win10ReleaseVersion <= dwRegValue)
-      bRetValue = true;
-  }
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx47RegKeyName, g_szNetfx47RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
+	{
+		if (g_dwNetfx47ReleaseVersion <= dwRegValue || g_dwNetfx47Win10ReleaseVersion <= dwRegValue)
+			bRetValue = true;
+	}
 
-  return bRetValue;
+	return bRetValue;
 }
 
 
@@ -828,16 +833,41 @@ false otherwise
 ******************************************************************/
 bool IsNetfx471Installed()
 {
-  bool bRetValue = false;
-  DWORD dwRegValue = 0;
+	bool bRetValue = false;
+	DWORD dwRegValue = 0;
 
-  if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx47RegKeyName, g_szNetfx47RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
-  {
-    if (g_dwNetfx471ReleaseVersion <= dwRegValue || g_dwNetfx471Win10ReleaseVersion <= dwRegValue)
-      bRetValue = true;
-  }
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx47RegKeyName, g_szNetfx47RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
+	{
+		if (g_dwNetfx471ReleaseVersion <= dwRegValue || g_dwNetfx471Win10ReleaseVersion <= dwRegValue)
+			bRetValue = true;
+	}
 
-  return bRetValue;
+	return bRetValue;
+}
+
+
+/******************************************************************
+Function Name:	IsNetfx472Installed
+Description:	Uses the detection method recommended at
+http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
+to determine whether the .NET Framework 4.7.2 is
+installed on the machine
+Inputs:         NONE
+Results:        true if the .NET Framework 4.7.2 is installed
+false otherwise
+******************************************************************/
+bool IsNetfx472Installed()
+{
+	bool bRetValue = false;
+	DWORD dwRegValue = 0;
+
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx47RegKeyName, g_szNetfx47RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
+	{
+		if (g_dwNetfx472ReleaseVersion <= dwRegValue || g_dwNetfx472Win10ReleaseVersion <= dwRegValue)
+			bRetValue = true;
+	}
+
+	return bRetValue;
 }
 
 
@@ -877,38 +907,72 @@ bool RegistryGetValue(HKEY hk, const TCHAR * pszKey, const TCHAR * pszValue, DWO
 
 //********************************************* NSIS Plugin Functions ****************************************************************************
 
+//***************************************************** .NET 4.7.2 *******************************************************************************
+
+extern "C"
+void __declspec(dllexport) IsDotNet472Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
+{
+	EXDLL_INIT();
+	pushstring((IsNetfx472Installed()) ? L"true" : L"false");
+}
+
+extern "C"
+void __declspec(dllexport) GetDotNet472ServicePack(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
+{
+	EXDLL_INIT();
+
+	int iNetfx472SPLevel = -1;
+	bool bNetfx472Installed = (IsNetfx472Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH * 20];
+
+	if (bNetfx472Installed)
+	{
+		iNetfx472SPLevel = GetNetfxSPLevel(g_szNetfx46RegKeyName, g_szNetfx40SPxRegValueName);
+
+		if (iNetfx472SPLevel > 0)
+			pushint(iNetfx472SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
+}
+
 //***************************************************** .NET 4.7.1 *******************************************************************************
 
 extern "C"
 void __declspec(dllexport) IsDotNet471Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
-  EXDLL_INIT();
-  pushstring((IsNetfx471Installed()) ? L"true" : L"false");
+	EXDLL_INIT();
+	pushstring((IsNetfx471Installed()) ? L"true" : L"false");
 }
 
 extern "C"
 void __declspec(dllexport) GetDotNet471ServicePack(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
-  EXDLL_INIT();
+	EXDLL_INIT();
 
-  int iNetfx471SPLevel = -1;
-  bool bNetfx471Installed = (IsNetfx471Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
-  TCHAR szMessage[MAX_PATH];
-  TCHAR szOutputString[MAX_PATH * 20];
+	int iNetfx471SPLevel = -1;
+	bool bNetfx471Installed = (IsNetfx471Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH * 20];
 
-  if (bNetfx471Installed)
-  {
-    iNetfx471SPLevel = GetNetfxSPLevel(g_szNetfx46RegKeyName, g_szNetfx40SPxRegValueName);
+	if (bNetfx471Installed)
+	{
+		iNetfx471SPLevel = GetNetfxSPLevel(g_szNetfx46RegKeyName, g_szNetfx40SPxRegValueName);
 
-    if (iNetfx471SPLevel > 0)
-      pushint(iNetfx471SPLevel);
-    else
-      pushint(-1);
-  }
-  else
-  {
-    pushint(-2);
-  }
+		if (iNetfx471SPLevel > 0)
+			pushint(iNetfx471SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
 }
 
 //***************************************************** .NET 4.7 *********************************************************************************
@@ -916,33 +980,33 @@ void __declspec(dllexport) GetDotNet471ServicePack(HWND hwndParent, int string_s
 extern "C"
 void __declspec(dllexport) IsDotNet47Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
-  EXDLL_INIT();
-  pushstring((IsNetfx47Installed()) ? L"true" : L"false");
+	EXDLL_INIT();
+	pushstring((IsNetfx47Installed()) ? L"true" : L"false");
 }
 
 extern "C"
 void __declspec(dllexport) GetDotNet47ServicePack(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
-  EXDLL_INIT();
+	EXDLL_INIT();
 
-  int iNetfx47SPLevel = -1;
-  bool bNetfx47Installed = (IsNetfx47Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
-  TCHAR szMessage[MAX_PATH];
-  TCHAR szOutputString[MAX_PATH * 20];
+	int iNetfx47SPLevel = -1;
+	bool bNetfx47Installed = (IsNetfx47Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH * 20];
 
-  if (bNetfx47Installed)
-  {
-    iNetfx47SPLevel = GetNetfxSPLevel(g_szNetfx47RegKeyName, g_szNetfx40SPxRegValueName);
+	if (bNetfx47Installed)
+	{
+		iNetfx47SPLevel = GetNetfxSPLevel(g_szNetfx47RegKeyName, g_szNetfx40SPxRegValueName);
 
-    if (iNetfx47SPLevel > 0)
-      pushint(iNetfx47SPLevel);
-    else
-      pushint(-1);
-  }
-  else
-  {
-    pushint(-2);
-  }
+		if (iNetfx47SPLevel > 0)
+			pushint(iNetfx47SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
 }
 
 //***************************************************** .NET 4.6.2 *******************************************************************************

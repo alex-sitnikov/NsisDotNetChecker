@@ -2,30 +2,34 @@
 	Var /GLOBAL dotNetUrl${FrameworkVersion}
 	Var /GLOBAL dotNetReadableVersion${FrameworkVersion}
 
-	!ifndef DOTNET471_URL
-	!define DOTNET471_URL	 	"http://go.microsoft.com/fwlink/?LinkId=852104"
-	!define DOTNET47_URL	 	"http://go.microsoft.com/fwlink/?LinkId=825302"
-	!define DOTNET462_URL	 	"http://go.microsoft.com/fwlink/?LinkId=780600"
-	!define DOTNET461_URL	 	"http://go.microsoft.com/fwlink/?LinkId=671743"
-	!define DOTNET46_URL	 	"http://go.microsoft.com/fwlink/?LinkId=528232"
-	!define DOTNET452_URL	 	"http://go.microsoft.com/fwlink/?LinkId=397708"
-	!define DOTNET451_URL 		"http://go.microsoft.com/fwlink/?LinkId=322116"
-	!define DOTNET45_URL 	    "http://go.microsoft.com/fwlink/?LinkId=225702"
-	!define DOTNET40Full_URL 	"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=0a391abd-25c1-4fc0-919f-b21f31ab88b7&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f9%2f5%2fA%2f95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE%2fdotNetFx40_Full_x86_x64.exe"
-	!define DOTNET40Client_URL	"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=e5ad0459-cbcc-4b4f-97b6-fb17111cf544&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f5%2f6%2f2%2f562A10F9-C9F4-4313-A044-9C94E0A8FAC8%2fdotNetFx40_Client_x86_x64.exe"
-	!define DOTNET35_URL		"http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
-	!define DOTNET30_URL		"http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
-	!define DOTNET20_URL		"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=0856eacb-4362-4b0d-8edd-aab15c5e04f5&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f5%2f6%2f7%2f567758a3-759e-473e-bf8f-52154438565a%2fdotnetfx.exe"
-	!define DOTNET11_URL		"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
-	!define DOTNET10_URL		"http://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
+	!ifndef DOTNET472_URL
+	!define DOTNET472_URL       "https://go.microsoft.com/fwlink/?LinkId=863265"
+	!define DOTNET471_URL       "https://go.microsoft.com/fwlink/?LinkId=852104"
+	!define DOTNET47_URL        "https://go.microsoft.com/fwlink/?LinkId=825302"
+	!define DOTNET462_URL       "https://go.microsoft.com/fwlink/?LinkId=780600"
+	!define DOTNET461_URL       "https://go.microsoft.com/fwlink/?LinkId=671743"
+	!define DOTNET46_URL        "https://go.microsoft.com/fwlink/?LinkId=528232"
+	!define DOTNET452_URL       "https://go.microsoft.com/fwlink/?LinkId=397708"
+	!define DOTNET451_URL       "https://go.microsoft.com/fwlink/?LinkId=322116"
+	!define DOTNET45_URL        "https://go.microsoft.com/fwlink/?LinkId=225702"
+	!define DOTNET40Full_URL    "https://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=0a391abd-25c1-4fc0-919f-b21f31ab88b7&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f9%2f5%2fA%2f95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE%2fdotNetFx40_Full_x86_x64.exe"
+	!define DOTNET40Client_URL  "https://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=e5ad0459-cbcc-4b4f-97b6-fb17111cf544&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f5%2f6%2f2%2f562A10F9-C9F4-4313-A044-9C94E0A8FAC8%2fdotNetFx40_Client_x86_x64.exe"
+	!define DOTNET35_URL        "https://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
+	!define DOTNET30_URL        "https://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
+	!define DOTNET20_URL        "https://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=0856eacb-4362-4b0d-8edd-aab15c5e04f5&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f5%2f6%2f7%2f567758a3-759e-473e-bf8f-52154438565a%2fdotnetfx.exe"
+	!define DOTNET11_URL        "https://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
+	!define DOTNET10_URL        "https://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
 	!endif
 
-	${If} ${FrameworkVersion} == "471"
+	${If} ${FrameworkVersion} == "472"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET472_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.7.2"
+	${ElseIf} ${FrameworkVersion} == "471"
 		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET471_URL}
 		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.7.1"
 	${ElseIf} ${FrameworkVersion} == "47"
 		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET47_URL}
-		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.7"  
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.7"
 	${ElseIf} ${FrameworkVersion} == "462"
 		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET462_URL}
 		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.6.2"
@@ -66,7 +70,7 @@
 		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET10_URL}
 		StrCpy $dotNetReadableVersion${FrameworkVersion} "1.0"
 	${EndIf}
-	
+
 	DetailPrint "Checking .NET Framework version..."
 
 	Push $0
@@ -80,9 +84,9 @@
 
 	DotNetChecker::IsDotNet${FrameworkVersion}Installed
 	Pop $0
-	
+
 	${If} $0 == "false"
-${OrIf} $0 == "f"  ; if script is compiled in ANSI mode then we get only an "f"  https://github.com/ReVolly/NsisDotNetChecker/issues/4
+	${OrIf} $0 == "f"  ; if script is compiled in ANSI mode then we get only an "f"  https://github.com/ReVolly/NsisDotNetChecker/issues/4
 		DetailPrint ".NET Framework $dotNetReadableVersion${FrameworkVersion} not found, download is required for program to run."
 		Goto NoDotNET${FrameworkVersion}
 	${Else}
@@ -92,7 +96,7 @@ ${OrIf} $0 == "f"  ; if script is compiled in ANSI mode then we get only an "f" 
 
 NoDotNET${FrameworkVersion}:
 	MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
-	".NET Framework not installed. Required version: $dotNetReadableVersion${FrameworkVersion}.$\nDownload .NET Framework $dotNetReadableVersion${FrameworkVersion} from www.microsoft.com?" \
+	".NET Framework not installed. Required version: $dotNetReadableVersion${FrameworkVersion}.$\nDownload .NET Framework $dotNetReadableVersion${FrameworkVersion} from microsoft.com?" \
 	/SD IDYES IDYES DownloadDotNET${FrameworkVersion} IDNO NewDotNET${FrameworkVersion}
 	goto GiveUpDotNET${FrameworkVersion} ;IDCANCEL
 
@@ -104,7 +108,7 @@ DownloadDotNET${FrameworkVersion}:
 	Pop $0
 	${If} $0 == "cancel"
 		MessageBox MB_YESNO|MB_ICONEXCLAMATION \
-		"Download cancelled.  Continue Installation?" \
+		"Download canceled.  Continue Installation?" \
 		IDYES NewDotNET${FrameworkVersion} IDNO GiveUpDotNET${FrameworkVersion}
 	${ElseIf} $0 != "success"
 		MessageBox MB_YESNO|MB_ICONEXCLAMATION \
@@ -121,7 +125,7 @@ DownloadDotNET${FrameworkVersion}:
 	goto NewDotNet${FrameworkVersion}
 
 GiveUpDotNET${FrameworkVersion}:
-	Abort "Installation cancelled by user."
+	Abort "Installation canceled by user."
 
 NewDotNET${FrameworkVersion}:
 	DetailPrint "Proceeding with remainder of installation."
