@@ -45,6 +45,8 @@ const TCHAR *g_szNetfx46RegKeyName = g_szNetfx45RegKeyName;
 const TCHAR *g_szNetfx46RegValueName = g_szNetfx45RegValueName;
 const TCHAR *g_szNetfx47RegKeyName = g_szNetfx45RegKeyName;
 const TCHAR *g_szNetfx47RegValueName = g_szNetfx45RegValueName;
+const TCHAR* g_szNetfx48RegKeyName = g_szNetfx45RegKeyName;
+const TCHAR* g_szNetfx48RegValueName = g_szNetfx45RegValueName;
 const TCHAR *g_szNetfxStandardRegValueName = _T("Install");
 const TCHAR *g_szNetfxStandardSPxRegValueName = _T("SP");
 const TCHAR *g_szNetfxStandardVersionRegValueName = _T("Version");
@@ -98,6 +100,10 @@ const int g_dwNetfx471ReleaseVersion = 461310;
 const int g_dwNetfx472Win10ReleaseVersion = 461808;
 const int g_dwNetfx472ReleaseVersion = 461814;
 
+// Version information for final release of .NET Framework 4.8
+const int g_dwNetfx48Win10ReleaseVersion = 528040;
+const int g_dwNetfx48ReleaseVersion = 528049;
+
 // Constants for known .NET Framework versions used with the GetRequestedRuntimeInfo API
 const TCHAR *g_szNetfx10VersionString = _T("v1.0.3705");
 const TCHAR *g_szNetfx11VersionString = _T("v1.1.4322");
@@ -127,6 +133,7 @@ bool IsNetfx462Installed();
 bool IsNetfx47Installed();
 bool IsNetfx471Installed();
 bool IsNetfx472Installed();
+bool IsNetfx48Installed();
 bool RegistryGetValue(HKEY, const TCHAR*, const TCHAR*, DWORD, LPBYTE, DWORD);
 
 
@@ -872,6 +879,31 @@ bool IsNetfx472Installed()
 
 
 /******************************************************************
+Function Name:	IsNetfx48Installed
+Description:	Uses the detection method recommended at
+http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
+to determine whether the .NET Framework 4.8 is
+installed on the machine
+Inputs:         NONE
+Results:        true if the .NET Framework 4.8 is installed
+false otherwise
+******************************************************************/
+bool IsNetfx48Installed()
+{
+	bool bRetValue = false;
+	DWORD dwRegValue = 0;
+
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx48RegKeyName, g_szNetfx48RegValueName, NULL, (LPBYTE)& dwRegValue, sizeof(DWORD)))
+	{
+		if (g_dwNetfx48ReleaseVersion <= dwRegValue || g_dwNetfx48Win10ReleaseVersion <= dwRegValue)
+			bRetValue = true;
+	}
+
+	return bRetValue;
+}
+
+
+/******************************************************************
 Function Name:  RegistryGetValue
 Description:    Get the value of a reg key
 Inputs:         HKEY hk - The hk of the key to retrieve
@@ -906,6 +938,41 @@ bool RegistryGetValue(HKEY hk, const TCHAR * pszKey, const TCHAR * pszValue, DWO
 }
 
 //********************************************* NSIS Plugin Functions ****************************************************************************
+
+//***************************************************** .NET 4.8 *********************************************************************************
+
+extern "C"
+void __declspec(dllexport) IsDotNet48Installed(HWND hwndParent, int string_size, TCHAR* variables, stack_t** stacktop, extra_parameters* extra)
+{
+	EXDLL_INIT();
+	pushstring((IsNetfx48Installed()) ? L"true" : L"false");
+}
+
+extern "C"
+void __declspec(dllexport) GetDotNet48ServicePack(HWND hwndParent, int string_size, TCHAR* variables, stack_t** stacktop, extra_parameters* extra)
+{
+	EXDLL_INIT();
+
+	int iNetfx48SPLevel = -1;
+	bool bNetfx48Installed = (IsNetfx48Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH * 20];
+
+	if (bNetfx48Installed)
+	{
+		iNetfx48SPLevel = GetNetfxSPLevel(g_szNetfx46RegKeyName, g_szNetfx40SPxRegValueName);
+
+		if (iNetfx48SPLevel > 0)
+			pushint(iNetfx48SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
+}
+
 
 //***************************************************** .NET 4.7.2 *******************************************************************************
 
@@ -1077,7 +1144,7 @@ void __declspec(dllexport) GetDotNet461ServicePack(HWND hwndParent, int string_s
 	}
 }
 
-//***************************************************** .NET 4.6 **********************************************************************************
+//***************************************************** .NET 4.6 *********************************************************************************
 
 extern "C"
 void __declspec(dllexport) IsDotNet46Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
@@ -1111,7 +1178,7 @@ void __declspec(dllexport) GetDotNet46ServicePack(HWND hwndParent, int string_si
 	}
 }
 
-//***************************************************** .NET 4.52 **********************************************************************************
+//***************************************************** .NET 4.5.2 *******************************************************************************
 
 extern "C"
 void __declspec(dllexport) IsDotNet452Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
@@ -1145,7 +1212,7 @@ void __declspec(dllexport) GetDotNet452ServicePack(HWND hwndParent, int string_s
 	}
 }
 
-//***************************************************** .NET 4.51 **********************************************************************************
+//***************************************************** .NET 4.5.1 *******************************************************************************
 
 extern "C"
 void __declspec(dllexport) IsDotNet451Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
@@ -1179,7 +1246,7 @@ void __declspec(dllexport) GetDotNet451ServicePack(HWND hwndParent, int string_s
 	}
 }
 
-//************************************************* .NET 4.5 ********************************************************************************
+//************************************************* .NET 4.5 *************************************************************************************
 extern "C"
 void __declspec(dllexport) IsDotNet45Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
@@ -1278,7 +1345,7 @@ void __declspec(dllexport) GetDotNet40ClientServicePack(HWND hwndParent, int str
 	}
 }
 
-//***************************************************** .NET 3.5 **********************************************************************************
+//***************************************************** .NET 3.5 *********************************************************************************
 extern "C"
 void __declspec(dllexport) IsDotNet35Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
@@ -1315,7 +1382,7 @@ void __declspec(dllexport) GetDotNet35ServicePack(HWND hwndParent, int string_si
 	}
 }
 
-//***************************************************** .NET 3.0 **********************************************************************************
+//***************************************************** .NET 3.0 *********************************************************************************
 extern "C"
 void __declspec(dllexport) IsDotNet30Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
@@ -1352,7 +1419,7 @@ void __declspec(dllexport) GetDotNet30ServicePack(HWND hwndParent, int string_si
 	}
 }
 
-//***************************************************** .NET 2.0 **********************************************************************************
+//***************************************************** .NET 2.0 *********************************************************************************
 extern "C"
 void __declspec(dllexport) IsDotNet20Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
@@ -1385,7 +1452,7 @@ void __declspec(dllexport) GetDotNet20ServicePack(HWND hwndParent, int string_si
 	}
 }
 
-//***************************************************** .NET 1.1 **********************************************************************************
+//***************************************************** .NET 1.1 *********************************************************************************
 extern "C"
 void __declspec(dllexport) IsDotNet11Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
@@ -1418,7 +1485,7 @@ void __declspec(dllexport) GetDotNet11ServicePack(HWND hwndParent, int string_si
 	}
 }
 
-//***************************************************** .NET 1.0 **********************************************************************************
+//***************************************************** .NET 1.0 *********************************************************************************
 extern "C"
 void __declspec(dllexport) IsDotNet10Installed(HWND hwndParent, int string_size, TCHAR *variables, stack_t **stacktop, extra_parameters *extra)
 {
