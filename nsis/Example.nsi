@@ -26,9 +26,20 @@ RequestExecutionLevel admin
 Section "Dummy Section" SecDummy
 
   SetOutPath "$INSTDIR"
+
+  ;Option 1: this is the original function
+  ;It installs the .NET version if needed, and if that installer requires a reboot it will reboot in the middle of this call.
+  ;Doesn't send a return, if the .NET installer needs a restart it will, in the middle of your install.
+  ;.NET Installer 4.x will definetly need a reboot if any thing is currently loaded and using any .NET 4.x assemblies.
+  !insertmacro CheckNetFramework 472
   
-  !insertmacro CheckNetFramework 48
-  
+  ;Option 2: If you want to delay a restart with a .NET install use this call, $0 will have true/false as to an install happened.
+  ;First Parameter == Same .NET version as used above (version minus the seperations '.')
+  ;Second Parameter == returned as "true" if a .NET Install happened, "false" otherwise.
+  !insertmacro CheckNetFrameworkDelayRestart 48 $0
+  DetailPrint "Did we install a .NET Framework: $0"
+
+
   ;Store installation folder
   WriteRegStr HKCU "Software\DotNetChecker Example" "" $INSTDIR
   
