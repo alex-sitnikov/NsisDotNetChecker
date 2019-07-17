@@ -25,7 +25,7 @@ The .NET Framework Checker NSIS plugin is used to detect if the required .NET Fr
 The Plugin and its Macro(s) can be invoked by any Function or within any Section of the NSI script.
 Only one macro needs to be used:
 `CheckNetFramework` will reboot if required in the middle of the macro
-`CheckNetFrameworkDelayRestart` returns "true" if an installer was run.
+`CheckNetFrameworkDelayRestart` overrides a reboot, and returns "true" if an installer was run.
 
 ### .NET 4.8
 
