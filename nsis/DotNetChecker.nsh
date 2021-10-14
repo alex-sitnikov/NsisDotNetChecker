@@ -2,7 +2,8 @@
 	Var /GLOBAL dotNetUrl${FrameworkVersion}
 	Var /GLOBAL dotNetReadableVersion${FrameworkVersion}
 
-	!ifndef DOTNET472_URL
+	!ifndef DOTNET48_URL
+	!define DOTNET48_URL        "https://go.microsoft.com/fwlink/?LinkId=2088631"
 	!define DOTNET472_URL       "https://go.microsoft.com/fwlink/?LinkId=863265"
 	!define DOTNET471_URL       "https://go.microsoft.com/fwlink/?LinkId=852104"
 	!define DOTNET47_URL        "https://go.microsoft.com/fwlink/?LinkId=825302"
@@ -21,7 +22,10 @@
 	!define DOTNET10_URL        "https://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
 	!endif
 
-	${If} ${FrameworkVersion} == "472"
+	${If} ${FrameworkVersion} == "48"
+		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET48_URL}
+		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.8"
+	${ElseIf} ${FrameworkVersion} == "472"
 		StrCpy $dotNetUrl${FrameworkVersion} ${DOTNET472_URL}
 		StrCpy $dotNetReadableVersion${FrameworkVersion} "4.7.2"
 	${ElseIf} ${FrameworkVersion} == "471"

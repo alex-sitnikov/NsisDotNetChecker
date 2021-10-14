@@ -27,7 +27,7 @@ Section "Dummy Section" SecDummy
 
   SetOutPath "$INSTDIR"
   
-  !insertmacro CheckNetFramework 45
+  !insertmacro CheckNetFramework 48
   
   ;Store installation folder
   WriteRegStr HKCU "Software\DotNetChecker Example" "" $INSTDIR
