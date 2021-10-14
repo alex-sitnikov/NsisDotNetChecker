@@ -28,6 +28,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="pluginapi.lib" />
+    <Library Include="nsis\pluginapi.lib" />
   </ItemGroup>
 </Project>

@@ -22,75 +22,95 @@ The .NET Framework Checker NSIS plugin is used to detect if the required .NET Fr
 
 ## Usage
 
-The Plugin and its Macro can be invoked by any Function or within any Section of the NSI script.
+The Plugin and its Macro(s) can be invoked by any Function or within any Section of the NSI script.
+Only one macro needs to be used:
+`CheckNetFramework` will reboot if required in the middle of the macro
+`CheckNetFrameworkDelayRestart` overrides a reboot, and returns "true" if an installer was run.
 
 ### .NET 4.8
 
 	!insertmacro CheckNetFramework 48
+	!insertmacro CheckNetFrameworkDelayRestart 48 $0 ; Returns if an install was performed
 
 ### .NET 4.7.2
 
 	!insertmacro CheckNetFramework 472
+	!insertmacro CheckNetFrameworkDelayRestart 472 $0 ; Returns if an install was performed
 
 ### .NET 4.7.1
 
 	!insertmacro CheckNetFramework 471
+	!insertmacro CheckNetFrameworkDelayRestart 471 $0 ; Returns if an install was performed
 
 ### .NET 4.7
 
 	!insertmacro CheckNetFramework 47
+	!insertmacro CheckNetFrameworkDelayRestart 47 $0 ; Returns if an install was performed
 
 ### .NET 4.6.2
 
 	!insertmacro CheckNetFramework 462
+	!insertmacro CheckNetFrameworkDelayRestart 462 $0 ; Returns if an install was performed
 
 ### .NET 4.6.1
 
 	!insertmacro CheckNetFramework 461
+	!insertmacro CheckNetFrameworkDelayRestart 461 $0 ; Returns if an install was performed
 	
 ### .NET 4.6
 
 	!insertmacro CheckNetFramework 46
+	!insertmacro CheckNetFrameworkDelayRestart 46 $0 ; Returns if an install was performed
 
 ### .NET 4.5.2
 
-	!insertmacro CheckNetFramework 452 
+	!insertmacro CheckNetFramework 452
+	!insertmacro CheckNetFrameworkDelayRestart 452 $0 ; Returns if an install was performed
 
 ### .NET 4.5.1
 
-	!insertmacro CheckNetFramework 451 
+	!insertmacro CheckNetFramework 451
+	!insertmacro CheckNetFrameworkDelayRestart 451 $0 ; Returns if an install was performed
 
 ### .NET 4.5
 
 	!insertmacro CheckNetFramework 45
+	!insertmacro CheckNetFrameworkDelayRestart 45 $0 ; Returns if an install was performed
 
 ### .NET 4.0 Client
 
 	!insertmacro CheckNetFramework 40Client
+	!insertmacro CheckNetFrameworkDelayRestart 40Client $0 ; Returns if an install was performed
 
 ### .NET 4. Full
 
 	!insertmacro CheckNetFramework 40Full
+	!insertmacro CheckNetFrameworkDelayRestart 40Full $0 ; Returns if an install was performed
 
 ### .NET 3.5
 
 	!insertmacro CheckNetFramework 35 ; if your application targets .NET 3.5 Framework
+	!insertmacro CheckNetFrameworkDelayRestart 35 $0 ; Returns if an install was performed
 
 ### .NET 3.0
 
 	!insertmacro CheckNetFramework 30 ; if your application targets .NET 3.0 Framework
+	!insertmacro CheckNetFrameworkDelayRestart 30 $0 ; Returns if an install was performed
 
 ### .NET 2.0
 
 	!insertmacro CheckNetFramework 20 ; if your application targets .NET 2.0 Framework
+	!insertmacro CheckNetFrameworkDelayRestart 20 $0 ; Returns if an install was performed
 
 ### .NET 1.1
 
 	!insertmacro CheckNetFramework 11 ; if your application targets .NET 1.1 Framework
+	!insertmacro CheckNetFrameworkDelayRestart 11 $0 ; Returns if an install was performed
 
 ### .NET 1.0
 
 	!insertmacro CheckNetFramework 10 ; if your application targets .NET 1.0 Framework
+	!insertmacro CheckNetFrameworkDelayRestart 10 $0 ; Returns if an install was performed
 
 ---
 
