@@ -9,8 +9,15 @@
 	!insertmacro CheckNetFrameworkWithRestartOptions ${FrameworkVersion} true ${ReturnDotNetInstalled}
 !macroend
 
+;https://dotnet.microsoft.com/en-us/download/dotnet-framework/net481
+;https://learn.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies
+
+;https://go.microsoft.com/fwlink/?linkid=2203306  DEV download
+;https://go.microsoft.com/fwlink/?LinkId=2203304 WEb Download
+
 !macro GetFrameworkUrlAndReadableVersions FrameworkVersion FrameworkUrl FrameworkReadableVersion
-	!ifndef DOTNET48_URL
+	!ifndef DOTNET481_URL
+		!define DOTNET481_URL        "https://go.microsoft.com/fwlink/?LinkId=2203306"
 		!define DOTNET48_URL        "https://go.microsoft.com/fwlink/?LinkId=2088631"
 		!define DOTNET472_URL       "https://go.microsoft.com/fwlink/?LinkId=863265"
 		!define DOTNET471_URL       "https://go.microsoft.com/fwlink/?LinkId=852104"
@@ -30,9 +37,12 @@
 		!define DOTNET10_URL        "https://www.microsoft.com/downloads/info.aspx?na=41&srcfamilyid=262d25e3-f589-4842-8157-034d1e7cf3a3&srcdisplaylang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2fa%2fa%2fc%2faac39226-8825-44ce-90e3-bf8203e74006%2fdotnetfx.exe"
 	!endif
 
-	${If} ${FrameworkVersion} == "48"
+	${If} ${FrameworkVersion} == "481"
+		StrCpy ${FrameworkUrl} ${DOTNET481_URL}
+		StrCpy ${FrameworkReadableVersion} "4.8.1"
+	${ElseIf} ${FrameworkVersion} == "48"
 		StrCpy ${FrameworkUrl} ${DOTNET48_URL}
-		StrCpy ${FrameworkReadableVersion} "4.8"
+		StrCpy ${FrameworkReadableVersion} "4.8"		
 	${ElseIf} ${FrameworkVersion} == "472"
 		StrCpy ${FrameworkUrl} ${DOTNET472_URL}
 		StrCpy ${FrameworkReadableVersion} "4.7.2"
