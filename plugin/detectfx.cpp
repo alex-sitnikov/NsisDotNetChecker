@@ -104,6 +104,13 @@ const int g_dwNetfx472ReleaseVersion = 461814;
 const int g_dwNetfx48Win10ReleaseVersion = 528040;
 const int g_dwNetfx48ReleaseVersion = 528049;
 
+// Version information for final release of .NET Framework 4.8.1
+const int g_dwNetfx481ReleaseVersion = 533325;
+
+//https://learn.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies
+//https://learn.microsoft.com/en-us/dotnet/framework/deployment/deployment-guide-for-developers?redirectedfrom=MSDN
+
+
 // Constants for known .NET Framework versions used with the GetRequestedRuntimeInfo API
 const TCHAR *g_szNetfx10VersionString = _T("v1.0.3705");
 const TCHAR *g_szNetfx11VersionString = _T("v1.1.4322");
@@ -134,6 +141,7 @@ bool IsNetfx47Installed();
 bool IsNetfx471Installed();
 bool IsNetfx472Installed();
 bool IsNetfx48Installed();
+bool IsNetfx481Installed();
 bool RegistryGetValue(HKEY, const TCHAR*, const TCHAR*, DWORD, LPBYTE, DWORD);
 
 
@@ -879,6 +887,30 @@ bool IsNetfx472Installed()
 
 
 /******************************************************************
+Function Name:	IsNetfx481Installed
+Description:	Uses the detection method recommended at
+http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
+to determine whether the .NET Framework 4.8.1 is
+installed on the machine
+Inputs:         NONE
+Results:        true if the .NET Framework 4.8.1 is installed
+false otherwise
+******************************************************************/
+bool IsNetfx481Installed()
+{
+	bool bRetValue = false;
+	DWORD dwRegValue = 0;
+
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx48RegKeyName, g_szNetfx48RegValueName, NULL, (LPBYTE)& dwRegValue, sizeof(DWORD)))
+	{
+		if (g_dwNetfx481ReleaseVersion <= dwRegValue)
+			bRetValue = true;
+	}
+
+	return bRetValue;
+}
+
+/******************************************************************
 Function Name:	IsNetfx48Installed
 Description:	Uses the detection method recommended at
 http://msdn.microsoft.com/en-us/library/ee942965(v=vs.110).aspx
@@ -893,7 +925,7 @@ bool IsNetfx48Installed()
 	bool bRetValue = false;
 	DWORD dwRegValue = 0;
 
-	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx48RegKeyName, g_szNetfx48RegValueName, NULL, (LPBYTE)& dwRegValue, sizeof(DWORD)))
+	if (RegistryGetValue(HKEY_LOCAL_MACHINE, g_szNetfx48RegKeyName, g_szNetfx48RegValueName, NULL, (LPBYTE)&dwRegValue, sizeof(DWORD)))
 	{
 		if (g_dwNetfx48ReleaseVersion <= dwRegValue || g_dwNetfx48Win10ReleaseVersion <= dwRegValue)
 			bRetValue = true;
@@ -901,7 +933,6 @@ bool IsNetfx48Installed()
 
 	return bRetValue;
 }
-
 
 /******************************************************************
 Function Name:  RegistryGetValue
@@ -938,6 +969,40 @@ bool RegistryGetValue(HKEY hk, const TCHAR * pszKey, const TCHAR * pszValue, DWO
 }
 
 //********************************************* NSIS Plugin Functions ****************************************************************************
+
+//***************************************************** .NET 4.8.1 *********************************************************************************
+
+extern "C"
+void __declspec(dllexport) IsDotNet481Installed(HWND hwndParent, int string_size, TCHAR * variables, stack_t * *stacktop, extra_parameters * extra)
+{
+	EXDLL_INIT();
+	pushstring((IsNetfx481Installed()) ? L"true" : L"false");
+}
+
+extern "C"
+void __declspec(dllexport) GetDotNet481ServicePack(HWND hwndParent, int string_size, TCHAR * variables, stack_t * *stacktop, extra_parameters * extra)
+{
+	EXDLL_INIT();
+
+	int iNetfx481SPLevel = -1;
+	bool bNetfx481Installed = (IsNetfx481Installed() && CheckNetfxVersionUsingMscoree(g_szNetfx40VersionString));
+	TCHAR szMessage[MAX_PATH];
+	TCHAR szOutputString[MAX_PATH * 20];
+
+	if (bNetfx481Installed)
+	{
+		iNetfx481SPLevel = GetNetfxSPLevel(g_szNetfx46RegKeyName, g_szNetfx40SPxRegValueName);
+
+		if (iNetfx481SPLevel > 0)
+			pushint(iNetfx481SPLevel);
+		else
+			pushint(-1);
+	}
+	else
+	{
+		pushint(-2);
+	}
+}
 
 //***************************************************** .NET 4.8 *********************************************************************************
 

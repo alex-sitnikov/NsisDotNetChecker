@@ -27,6 +27,11 @@ Only one macro needs to be used:
 `CheckNetFramework` will reboot if required in the middle of the macro
 `CheckNetFrameworkDelayRestart` overrides a reboot, and returns "true" if an installer was run.
 
+### .NET 4.8.1
+
+	!insertmacro CheckNetFramework 481
+	!insertmacro CheckNetFrameworkDelayRestart 481 $0 ; Returns if an install was performed
+
 ### .NET 4.8
 
 	!insertmacro CheckNetFramework 48
