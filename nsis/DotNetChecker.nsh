@@ -176,16 +176,16 @@ Function "DownloadDotNet"
 	Pop $0
 
 	DetailPrint "Beginning download of .NET Framework $1."
-	NSISDL::download $0 "${LOCAL_DOTNET_INSTALLER_LOCATION}"
+	inetc::get /caption "Downloading .NET Framework $1" /canceltext "Cancel" $0 "${LOCAL_DOTNET_INSTALLER_LOCATION}" /end
 	DetailPrint "Completed download."
 
 	Pop $0
-	${If} $0 == "cancel"
+	${If} $0 == "Cancelled"
 		Push false
 		MessageBox MB_YESNO|MB_ICONEXCLAMATION \
 		"Download canceled.  Continue Installation?" \
 		IDYES Continue IDNO Halt
-	${ElseIf} $0 != "success"
+	${ElseIf} $0 != "OK"
 		Push false
 		MessageBox MB_YESNO|MB_ICONEXCLAMATION \
 		"Download failed:$\n$0$\n$\nContinue Installation?" \
